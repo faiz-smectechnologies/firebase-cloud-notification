@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Push Notification Example</title>
+    <!-- Include Firebase JavaScript libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-messaging.js"></script>
+</head>
+
+<body>
+    <h1>Firebase Push Notification Example</h1>
+    <button id="subscribe">Subscribe to Push Notifications</button>
+
+    <script>
+        // Initialize Firebase with your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAVBa0P9u20drZiCOu-hDFHh-RHk8yBZPk",
+            authDomain: "push-notification-ada5a.firebaseapp.com",
+            projectId: "push-notification-ada5a",
+            storageBucket: "push-notification-ada5a.appspot.com",
+            messagingSenderId: "350988701977",
+            appId: "1:350988701977:web:00e20515ea7f8f09cff588",
+            measurementId: "G-4T2HGJC39T"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        // Get a reference to the messaging service
+        const messaging = firebase.messaging();
+
+        // Request permission to send notifications
+        document.getElementById("subscribe").addEventListener("click", () => {
+            messaging
+                .requestPermission()
+                .then(() => {
+                    console.log("Notification permission granted.");
+                    return messaging.getToken();
+                })
+                .then((token) => {
+                    console.log("Registration token:", token);
+                    // You can now send this token to your server for sending push notifications
+                })
+                .catch((err) => {
+                    console.error("Unable to get permission to notify.", err);
+                });
+        });
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('/firebase-messaging-sw.js')
+                .then(function (registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(function (error) {
+                    console.error('Service Worker registration failed:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>
